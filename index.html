@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-AI Nexus: Gemini Interface</title>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 400;
+        }
+
+        #apiKey, #userInput, button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        #chatbox {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            max-height: 50vh;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4a9fff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 700;
+        }
+
+        button:hover {
+            background-color: #3a7fcf;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .user {
+            background-color: #e6f2ff;
+            color: #333;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+
+        .assistant {
+            background-color: #f5f5f5;
+            color: #333;
+            align-self: flex-start;
+            margin-right: auto;
+            border-bottom-left-radius: 0;
+        }
+
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-color: #f0f0f0;
+        }
+
+        .synapse {
+            position: absolute;
+            background-color: #fff9c4;
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        @keyframes fire {
+            0% { opacity: 0; width: 0; height: 0; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; width: 200px; height: 200px; }
+        }
+
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e0e0e0;
+            border-top: 3px solid #4a9fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div class="container">
+        <h1>Bio-AI Nexus: Gemini Interface</h1>
+        <input type="password" id="apiKey" placeholder="Enter your Gemini API Key" />
+        <div id="chatbox"></div>
+        <textarea id="userInput" placeholder="Enter your message..." rows="3"></textarea>
+        <button onclick="sendMessage()">Send</button>
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <script>
+        let genAI, model;
+
+        async function initializeAPI() {
+            const apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                alert('Please enter your API key to initialize the interface.');
+                return;
+            }
+            
+            try {
+                genAI = new window.GoogleGenerativeAI(apiKey);
+                model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                document.getElementById('apiKey').disabled = true;
+                alert('Interface initialized successfully!');
+            } catch (error) {
+                console.error('Error initializing interface:', error);
+                alert('Failed to initialize interface. Please verify your key and retry.');
+            }
+        }
+
+        async function sendMessage() {
+            if (!model) {
+                await initializeAPI();
+                if (!model) return;
+            }
+
+            const userInput = document.getElementById('userInput').value;
+            if (!userInput.trim()) return;
+
+            addMessageToChatbox('user', userInput);
+            document.getElementById('userInput').value = '';
+            document.getElementById('loader').style.display = 'block';
+
+            try {
+                const result = await model.generateContent(userInput);
+                const response = await result.response;
+                const text = response.text();
+                addMessageToChatbox('assistant', text);
+            } catch (error) {
+                console.error('Error in processing:', error);
+                addMessageToChatbox('assistant', 'An error occurred. Please try again.');
+            } finally {
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        function addMessageToChatbox(sender, message) {
+            const chatbox = document.getElementById('chatbox');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.textContent = message;
+            chatbox.appendChild(messageElement);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Background synapse animation
+        const background = document.getElementById('background');
+
+        function createSynapse() {
+            const synapse = document.createElement('div');
+            synapse.classList.add('synapse');
+            synapse.style.left = `${Math.random() * 100}%`;
+            synapse.style.top = `${Math.random() * 100}%`;
+            synapse.style.animation = `fire 4s ease-out`;
+            background.appendChild(synapse);
+
+            setTimeout(() => {
+                background.removeChild(synapse);
+            }, 4000);
+        }
+
+        setInterval(createSynapse, 200);
+    </script>
+</body>
+</html>
