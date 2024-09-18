@@ -22,19 +22,22 @@ API-LLM-Hub is a lightweight JavaScript library that simplifies the use of multi
 Include the script and use API-LLM-Hub with just a few lines of code:
 
 ```html
-<script src="https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js" type="module"></script>
-<script>
-  const ai = new APILLMHub({
-    provider: 'openai',
-    apiKey: 'your-api-key',
-    model: 'gpt-3.5-turbo'
-  });
+<script type="module">
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
 
-  ai.initialize().then(() => {
-    ai.sendMessage("Hello, AI!").then(response => {
-      console.log(response);
+  async function runTest() {
+    const ai = new APILLMHub({
+      provider: 'openai',
+      apiKey: 'your-api-key',
+      model: 'gpt-3.5-turbo'
     });
-  });
+
+    await ai.initialize();
+    const response = await ai.sendMessage("Hello, AI!");
+    console.log(response);
+  }
+
+  runTest();
 </script>
 ```
 
