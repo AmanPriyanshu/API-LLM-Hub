@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-class UnifiedAI {
+class APILLMHub {
   constructor(config) {
     this.provider = config.provider;
     this.apiKey = config.apiKey;
@@ -210,7 +210,7 @@ class UnifiedAI {
 }
 
 if (typeof window !== 'undefined') {
-  window.UnifiedAI = UnifiedAI;
+  window.APILLMHub = APILLMHub;
 }
 
-export default UnifiedAI;
+export default APILLMHub;
