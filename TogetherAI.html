@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-AI Nexus: Gemini Interface</title>
+    <title>Together AI Interface</title>
     <script type="importmap">
     {
         "imports": {
-        "@google/generative-ai": "https://esm.run/@google/generative-ai",
         "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
         }
     }
@@ -136,7 +135,7 @@
 <body>
     <div id="background"></div>
     <div class="container">
-        <h1>Bio-AI Nexus: Gemini Interface</h1>
+        <h1>Together AI Interface</h1>
         <input type="text" id="apiKeyInput" placeholder="Enter your API Key">
         <button onclick="initializeAPI()">Initialize API</button>
         <div id="chatbox"></div>
@@ -145,20 +144,27 @@
         <div id="loader" class="loader"></div>
     </div>
     <script type="module">
-        import { GoogleGenerativeAI } from "@google/generative-ai";
         import { marked } from 'marked';
-        let genAI, model;
+        let apiKey;
         let conversationHistory = [];
         window.initializeAPI = async function() {
-            const apiKey = document.getElementById('apiKeyInput').value;
+            apiKey = document.getElementById('apiKeyInput').value;
             if (!apiKey) {
                 alert('Please enter an API key');
                 return;
             }
 
             try {
-                genAI = new GoogleGenerativeAI(apiKey);
-                model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+                // Test API key with a simple request
+                const response = await fetch('https://api.together.xyz/v1/models', {
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Invalid API key');
+                }
                 
                 document.getElementById('userInput').disabled = false;
                 document.getElementById('sendButton').disabled = false;
@@ -178,20 +184,32 @@
             userInput.value = '';
             document.getElementById('loader').style.display = 'block';
             try {
-                conversationHistory.push({ role: "user", parts: message });
+                conversationHistory.push({ role: "user", content: message });
                 
-                const result = await model.generateContent({
-                    contents: [{ role: "user", parts: [{ text: conversationHistory.map(msg => `${msg.role}: ${msg.parts}`).join("\n") }] }],
-                    generationConfig: {
-                        maxOutputTokens: 1000,
+                const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
                     },
+                    body: JSON.stringify({
+                        model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+                        messages: conversationHistory,
+                        max_tokens: 1000
+                    })
                 });
-                const response = result.response;
-                addToChatbox(response.text(), 'assistant');
-                conversationHistory.push({ role: "model", parts: response.text() });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                const assistantMessage = data.choices[0].message.content;
+                addToChatbox(assistantMessage, 'assistant');
+                conversationHistory.push({ role: "assistant", content: assistantMessage });
             } catch (error) {
                 addToChatbox("An error occurred while processing your request.", 'assistant');
-                console.error('Gemini API error:', error);
+                console.error('Together AI API error:', error);
             } finally {
                 document.getElementById('loader').style.display = 'none';
             }
