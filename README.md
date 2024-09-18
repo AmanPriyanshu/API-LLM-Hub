@@ -54,6 +54,12 @@ Include the script and use API-LLM-Hub with just a few lines of code:
 - AI-enhanced browser extensions
 - Educational projects showcasing multiple AI providers
 
+## Demo Samples
+![homepage](/assets/main.png)
+![web-llm-generated-outputs-1](/assets/output_demo_1.png)
+![web-llm-generated-outputs-2](/assets/output_demo_2.png)
+![example-codes](/assets/sample_codes.png)
+
 ## Why Use API-LLM-Hub
 
 API-LLM-Hub addresses some common challenges in web-based AI integration:
