@@ -24,7 +24,7 @@ Include the script and use API-LLM-Hub with just a few lines of code:
 ```html
 <script src="https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js" type="module"></script>
 <script>
-  const ai = new UnifiedAI({
+  const ai = new APILLMHub({
     provider: 'openai',
     apiKey: 'your-api-key',
     model: 'gpt-3.5-turbo'
