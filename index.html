@@ -60,10 +60,41 @@
 </head>
 <body class="p-8">
   <div id="page-container" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <div class="flex justify-center space-x-4 mb-6">
+      <a href="https://amanpriyanshu.github.io" target="_blank" rel="noopener noreferrer" class="bg-[#0066cc] hover:bg-[#004c99] text-white font-bold py-2 px-4 rounded">
+        Website
+      </a>
+      <a href="https://amanpriyanshu.github.io/blogs/" target="_blank" rel="noopener noreferrer" class="bg-[#0066cc] hover:bg-[#004c99] text-white font-bold py-2 px-4 rounded">
+        Check out my blogs
+      </a>
+      <a href="https://amanpriyanshu.github.io/blogs/posts/2024/api-llm-hub/" target="_blank" rel="noopener noreferrer" class="bg-[#0066cc] hover:bg-[#004c99] text-white font-bold py-2 px-4 rounded">
+        Check out this library's blogs
+      </a>
+    </div>
+
     <h1 class="text-3xl font-bold mb-6 text-center text-[#0066cc]">API-LLM-Hub Demo</h1>
     <div class="intro bg-[#e6f3ff] border-l-4 border-[#0066cc] p-4 mb-6 rounded-r-md">
       <p class="mb-2"><strong>What is API-LLM-Hub?</strong></p>
       <p>API-LLM-Hub is a lightweight JavaScript library that simplifies the use of multiple AI language models directly in your web browser, with no build steps or backend required.</p>
+      
+      <p class="mt-4 mb-2"><strong>Direct Usage Example</strong></p>
+      <div class="code-block">
+        <pre><code class="language-javascript">
+import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+
+const ai = new APILLMHub({
+  provider: 'anthropic',
+  apiKey: 'your-anthropic-api-key',
+  model: 'claude-3-5-sonnet-20240620',
+  maxTokens: 50,
+  temperature: 0.7
+});
+
+await ai.initialize();
+const response = await ai.sendMessage("Hello, how are you?");
+console.log(response);
+        </code></pre>
+      </div>
     </div>
     
     <div class="mb-8 bg-[#f9f9f9] border-l-4 border-[#0066cc] p-4 rounded-r-md">
