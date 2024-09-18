@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API-LLM-Hub Test</title>
+</head>
+<body>
+    <h1>API-LLM-Hub Test</h1>
+    <div id="output"></div>
+
+    <script type="module">
+        import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+
+        async function runTest() {
+            try {
+                const ai = new APILLMHub({
+                    provider: 'openai',
+                    apiKey: 'openai_api_key',
+                    model: 'gpt-3.5-turbo',
+                    maxTokens: 50,
+                    temperature: 0.7
+                });
+
+                await ai.initialize();
+                const response = await ai.sendMessage("Hello, AI!");
+                document.getElementById('output').textContent = response;
+            } catch (error) {
+                document.getElementById('output').textContent = `Error: ${error.message}`;
+                console.error(error);
+            }
+        }
+
+        runTest();
+    </script>
+</body>
+</html>
