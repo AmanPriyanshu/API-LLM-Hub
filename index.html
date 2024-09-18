@@ -3,33 +3,226 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UnifiedAI Test</title>
+  <title>APILLMHub Demo</title>
   <script type="module" src="https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    .transition-max-height { transition: max-height 0.3s ease-out; max-height: 0; overflow: hidden; }
+    .transition-max-height.expanded { max-height: 500px; }
+    .code-block { position: relative; }
+    .copy-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 5px 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .copy-button:hover { background-color: rgba(255, 255, 255, 0.2); }
+    .api-key-input {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .api-key-input label {
+      width: 120px;
+      font-weight: bold;
+      color: #555;
+    }
+    .api-key-input input {
+      flex-grow: 1;
+    }
+  </style>
 </head>
-<body>
-  <h1>UnifiedAI Test</h1>
-  <div>
-    <label for="openai-key">OpenAI API Key:</label>
-    <input type="text" id="openai-key" placeholder="Enter your OpenAI API key">
+<body class="p-8">
+  <div id="page-container" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <h1 class="text-3xl font-bold mb-6 text-center text-[#0066cc]">API-LLM-Hub Demo</h1>
+    <div class="intro bg-[#e6f3ff] border-l-4 border-[#0066cc] p-4 mb-6 rounded-r-md">
+      <p class="mb-2"><strong>What is API-LLM-Hub?</strong></p>
+      <p>API-LLM-Hub is a lightweight JavaScript library that simplifies the use of multiple AI language models directly in your web browser, with no build steps or backend required.</p>
+    </div>
+    
+    <div class="mb-8 bg-[#f9f9f9] border-l-4 border-[#0066cc] p-4 rounded-r-md">
+      <h2 class="text-xl font-semibold mb-4 text-[#2c3e50]">API Keys</h2>
+      <div class="api-key-input">
+        <label for="openai-key">OpenAI:</label>
+        <input type="password" id="openai-key" class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc]" placeholder="Enter your OpenAI API key">
+      </div>
+      <div class="api-key-input">
+        <label for="anthropic-key">Anthropic:</label>
+        <input type="password" id="anthropic-key" class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc]" placeholder="Enter your Anthropic API key">
+      </div>
+      <div class="api-key-input">
+        <label for="togetherai-key">TogetherAI:</label>
+        <input type="password" id="togetherai-key" class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc]" placeholder="Enter your TogetherAI API key">
+      </div>
+      <div class="api-key-input">
+        <label for="gemini-key">Gemini:</label>
+        <input type="password" id="gemini-key" class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc]" placeholder="Enter your Gemini API key">
+      </div>
+    </div>
+    
+    <div class="mb-8 bg-[#e8f5e9] border-l-4 border-[#4caf50] p-4 rounded-r-md">
+      <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Test Message:</label>
+      <textarea id="message" rows="3" class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4caf50]" placeholder="Enter your test message here">Hello, how are you? What model is this? Who made you?</textarea>
+    </div>
+    
+    <button onclick="main()" class="w-full bg-[#0066cc] hover:bg-[#004c99] text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-300">
+      Run Test
+    </button>
+    
+    <div id="output" class="mt-8 p-4 bg-[#fff9e6] border-l-4 border-[#f39c12] rounded-r-md max-h-96 overflow-y-auto"></div>
+
+    <div class="mt-12 space-y-6">
+      <h2 class="text-2xl font-semibold mb-4 text-[#0066cc]">Individual Provider Examples</h2>
+      
+      <div class="border border-gray-200 rounded-md overflow-hidden">
+        <button onclick="toggleExample('openai')" class="w-full text-left px-4 py-2 font-medium bg-[#e6f3ff] hover:bg-[#cce6ff] focus:outline-none">
+          OpenAI Example
+        </button>
+        <div id="openai-example" class="transition-max-height">
+          <div class="code-block">
+            <pre><code class="language-javascript" id="openai-code">
+const ai = new APILLMHub({
+  provider: 'openai',
+  apiKey: 'your-openai-api-key',
+  model: 'gpt-3.5-turbo',
+  maxTokens: 50,
+  temperature: 0.7
+});
+
+ai.initialize().then(() => {
+  ai.sendMessage("Hello").then(response => {
+    console.log(response);
+  });
+});
+            </code></pre>
+            <button class="copy-button" onclick="copyCode('openai-code')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-md overflow-hidden">
+        <button onclick="toggleExample('anthropic')" class="w-full text-left px-4 py-2 font-medium bg-[#e8f5e9] hover:bg-[#c8e6c9] focus:outline-none">
+          Anthropic Example
+        </button>
+        <div id="anthropic-example" class="transition-max-height">
+          <div class="code-block">
+            <pre><code class="language-javascript" id="anthropic-code">
+const ai = new APILLMHub({
+  provider: 'anthropic',
+  apiKey: 'your-anthropic-api-key',
+  model: 'claude-3-5-sonnet-20240620',
+  maxTokens: 50,
+  temperature: 0.7
+});
+
+ai.initialize().then(() => {
+  ai.sendMessage("Hello").then(response => {
+    console.log(response);
+  });
+});
+            </code></pre>
+            <button class="copy-button" onclick="copyCode('anthropic-code')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-md overflow-hidden">
+        <button onclick="toggleExample('togetherai')" class="w-full text-left px-4 py-2 font-medium bg-[#fff9e6] hover:bg-[#fff3cd] focus:outline-none">
+          TogetherAI Example
+        </button>
+        <div id="togetherai-example" class="transition-max-height">
+          <div class="code-block">
+            <pre><code class="language-javascript" id="togetherai-code">
+const ai = new APILLMHub({
+  provider: 'togetherai',
+  apiKey: 'your-togetherai-api-key',
+  model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+  maxTokens: 50,
+  temperature: 0.7
+});
+
+ai.initialize().then(() => {
+  ai.sendMessage("Hello").then(response => {
+    console.log(response);
+  });
+});
+            </code></pre>
+            <button class="copy-button" onclick="copyCode('togetherai-code')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-md overflow-hidden">
+        <button onclick="toggleExample('gemini')" class="w-full text-left px-4 py-2 font-medium bg-[#f3e5f5] hover:bg-[#e1bee7] focus:outline-none">
+          Gemini Example
+        </button>
+        <div id="gemini-example" class="transition-max-height">
+          <div class="code-block">
+            <pre><code class="language-javascript" id="gemini-code">
+const ai = new APILLMHub({
+  provider: 'gemini',
+  apiKey: 'your-gemini-api-key',
+  model: 'gemini-1.5-pro',
+  maxTokens: 50,
+  temperature: 0.7
+});
+
+ai.initialize().then(() => {
+  ai.sendMessage("Hello").then(response => {
+    console.log(response);
+  });
+});
+            </code></pre>
+            <button class="copy-button" onclick="copyCode('gemini-code')">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <label for="anthropic-key">Anthropic API Key:</label>
-    <input type="text" id="anthropic-key" placeholder="Enter your Anthropic API key">
-  </div>
-  <div>
-    <label for="togetherai-key">TogetherAI API Key:</label>
-    <input type="text" id="togetherai-key" placeholder="Enter your TogetherAI API key">
-  </div>
-  <div>
-    <label for="gemini-key">Gemini API Key:</label>
-    <input type="text" id="gemini-key" placeholder="Enter your Gemini API key">
-  </div>
-  <button onclick="main()">Run Test</button>
-  <div id="output"></div>
 
   <script>
+    function toggleExample(provider) {
+      const example = document.getElementById(`${provider}-example`);
+      example.classList.toggle('expanded');
+    }
+
+    function copyCode(elementId) {
+      const codeElement = document.getElementById(elementId);
+      const textArea = document.createElement('textarea');
+      textArea.value = codeElement.textContent.trim();
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      const button = codeElement.parentElement.querySelector('.copy-button');
+      button.textContent = 'Copied!';
+      setTimeout(() => {
+        button.textContent = 'Copy';
+      }, 2000);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function testProvider(provider, apiKey, model, maxTokens, temperature) {
-      const ai = new UnifiedAI({
+      const ai = new APILLMHub({
         provider: provider,
         apiKey: apiKey,
         model: model,
@@ -39,39 +232,49 @@
 
       try {
         await ai.initialize();
-        log(`${provider} API initialized successfully`);
+        log(`✅ ${provider} API initialized successfully`);
 
-        const message = 'Hello, how are you? What model is this? Who made you?';
+        const message = document.getElementById('message').value;
+        if (provider === 'togetherai') {
+          log(`🕒 Waiting 1.5 seconds before sending message to TogetherAI...`);
+          await sleep(1500); // 1.5 seconds delay
+        }
         const response = await ai.sendMessage(message);
-        log(`${provider} response: ${response}`);
+        log(`🤖 ${provider} response: ${response}`);
       } catch (error) {
-        log(`${provider} error: ${error.message}`);
+        log(`❌ ${provider} error: ${error.message}`);
       }
     }
 
     function log(message) {
       const outputDiv = document.getElementById('output');
-      outputDiv.innerHTML += `<p>${message}</p>`;
+      outputDiv.innerHTML += `<p class="mb-2">${message}</p>`;
+      outputDiv.scrollTop = outputDiv.scrollHeight;
     }
 
     async function main() {
-      const openaiKey = document.getElementById('openai-key').value;
-      const anthropicKey = document.getElementById('anthropic-key').value;
-      const togetheraiKey = document.getElementById('togetherai-key').value;
-      const geminiKey = document.getElementById('gemini-key').value;
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = '';
+      
+      const providers = [
+        { name: 'openai', model: 'gpt-3.5-turbo' },
+        { name: 'anthropic', model: 'claude-3-5-sonnet-20240620' },
+        { name: 'togetherai', model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo' },
+        { name: 'gemini', model: 'gemini-1.5-pro' }
+      ];
 
-      // Test OpenAI
-      await testProvider('openai', openaiKey, 'gpt-3.5-turbo', 50, 0.7);
-
-      // Test Anthropic
-      await testProvider('anthropic', anthropicKey, 'claude-3-5-sonnet-20240620', 50, 0.7);
-
-      // Test TogetherAI
-      await testProvider('togetherai', togetheraiKey, 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo', 50, 0.7);
-
-      // Test Gemini
-      await testProvider('gemini', geminiKey, 'gemini-1.5-pro', 50, 0.7);
+      for (const provider of providers) {
+        const apiKey = document.getElementById(`${provider.name}-key`).value;
+        if (apiKey) {
+          log(`Testing ${provider.name}...`);
+          await testProvider(provider.name, apiKey, provider.model, 50, 0.7);
+        } else {
+          log(`⚠️ Skipping ${provider.name} (no API key provided)`);
+        }
+      }
     }
+
+    hljs.highlightAll();
   </script>
 </body>
 </html>
