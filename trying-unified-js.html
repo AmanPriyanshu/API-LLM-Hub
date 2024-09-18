@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UnifiedAI Test</title>
+  <!-- <script type="module" src="./unified-llm-api.js"></script> -->
+</head>
+<body>
+  <h1>UnifiedAI Test</h1>
+  <div>
+    <label for="openai-key">OpenAI API Key:</label>
+    <input type="text" id="openai-key" placeholder="Enter your OpenAI API key">
+  </div>
+  <div>
+    <label for="anthropic-key">Anthropic API Key:</label>
+    <input type="text" id="anthropic-key" placeholder="Enter your Anthropic API key">
+  </div>
+  <div>
+    <label for="togetherai-key">TogetherAI API Key:</label>
+    <input type="text" id="togetherai-key" placeholder="Enter your TogetherAI API key">
+  </div>
+  <div>
+    <label for="gemini-key">Gemini API Key:</label>
+    <input type="text" id="gemini-key" placeholder="Enter your Gemini API key">
+  </div>
+  <button onclick="main()">Run Test</button>
+  <div id="output"></div>
+
+  <script>
+    async function testProvider(provider, apiKey, model, maxTokens, temperature) {
+      const ai = new UnifiedAI({
+        provider: provider,
+        apiKey: apiKey,
+        model: model,
+        maxTokens: maxTokens,
+        temperature: temperature
+      });
+
+      try {
+        await ai.initialize();
+        log(`${provider} API initialized successfully`);
+
+        const message = 'Hello, how are you? What model is this? Who made you?';
+        const response = await ai.sendMessage(message);
+        log(`${provider} response: ${response}`);
+      } catch (error) {
+        log(`${provider} error: ${error.message}`);
+      }
+    }
+
+    function log(message) {
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML += `<p>${message}</p>`;
+    }
+
+    async function main() {
+      const openaiKey = document.getElementById('openai-key').value;
+      const anthropicKey = document.getElementById('anthropic-key').value;
+      const togetheraiKey = document.getElementById('togetherai-key').value;
+      const geminiKey = document.getElementById('gemini-key').value;
+
+      // Test OpenAI
+      await testProvider('openai', openaiKey, 'gpt-3.5-turbo', 50, 0.7);
+
+      // Test Anthropic
+      await testProvider('anthropic', anthropicKey, 'claude-v1', 50, 0.7);
+
+      // Test TogetherAI
+      await testProvider('togetherai', togetheraiKey, 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo', 50, 0.7);
+
+      // Test Gemini
+      await testProvider('gemini', geminiKey, 'gemini-1.5-pro', 50, 0.7);
+    }
+  </script>
+</body>
+</html>
