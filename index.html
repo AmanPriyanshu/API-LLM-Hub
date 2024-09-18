@@ -4,215 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bio-AI Nexus: Gemini Interface</title>
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@latest"></script>
+    <script type="importmap">
+    {
+        "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai",
+        "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
+        }
+    }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            overflow: hidden;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            font-weight: 400;
-        }
-
-        #apiKey, #userInput, button {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 14px;
-            background-color: #fff;
-            color: #333;
-            box-sizing: border-box;
-        }
-
-        #chatbox {
-            flex-grow: 1;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            margin-bottom: 15px;
-            background-color: #fff;
-            border-radius: 5px;
-            max-height: 50vh;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        button {
-            background-color: #4a9fff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-weight: 700;
-        }
-
-        button:hover {
-            background-color: #3a7fcf;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 80%;
-            line-height: 1.4;
-        }
-
-        .user {
-            background-color: #e6f2ff;
-            color: #333;
-            align-self: flex-end;
-            margin-left: auto;
-            border-bottom-right-radius: 0;
-        }
-
-        .assistant {
-            background-color: #f5f5f5;
-            color: #333;
-            align-self: flex-start;
-            margin-right: auto;
-            border-bottom-left-radius: 0;
-        }
-
-        #background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background-color: #f0f0f0;
-        }
-
-        .synapse {
-            position: absolute;
-            background-color: #fff9c4;
-            opacity: 0;
-            border-radius: 50%;
-        }
-
-        @keyframes fire {
-            0% { opacity: 0; width: 0; height: 0; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0; width: 200px; height: 200px; }
-        }
-
-        .loader {
-            display: none;
-            width: 50px;
-            height: 50px;
-            border: 3px solid #e0e0e0;
-            border-top: 3px solid #4a9fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: #f0f0f0;
+        overflow: hidden;
+    }
+    #background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    .container {
+        position: relative;
+        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+    #chatbox {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        background-color: white;
+    }
+    #userInput, #apiKeyInput {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #4a9fff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #3a7fcf;
+    }
+    .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #4a9fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    code {
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        max-width: 80%;
+    }
+    .user {
+        background-color: #e6f2ff;
+        color: #333;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+    .assistant {
+        background-color: #f5f5f5;
+        color: #333;
+        align-self: flex-start;
+        margin-right: auto;
+    }
+    .synapse {
+        position: absolute;
+        background-color: #fff9c4;
+        opacity: 0;
+        border-radius: 50%;
+    }
+    @keyframes fire {
+        0% { opacity: 0; width: 0; height: 0; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0; width: 200px; height: 200px; }
+    }
     </style>
 </head>
 <body>
     <div id="background"></div>
     <div class="container">
         <h1>Bio-AI Nexus: Gemini Interface</h1>
-        <input type="password" id="apiKey" placeholder="Enter your Gemini API Key" />
+        <input type="text" id="apiKeyInput" placeholder="Enter your API Key">
+        <button onclick="initializeAPI()">Initialize API</button>
         <div id="chatbox"></div>
-        <textarea id="userInput" placeholder="Enter your message..." rows="3"></textarea>
-        <button onclick="sendMessage()">Send</button>
-        <div class="loader" id="loader"></div>
+        <input type="text" id="userInput" placeholder="Enter your message" disabled>
+        <button onclick="sendMessage()" id="sendButton" disabled>Send</button>
+        <div id="loader" class="loader"></div>
     </div>
 
-    <script>
-        let genAI, model;
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        import { marked } from 'marked';
 
-        async function initializeAPI() {
-            const apiKey = document.getElementById('apiKey').value;
+        let genAI, model;
+        let conversationHistory = [];
+
+        window.initializeAPI = async function() {
+            const apiKey = document.getElementById('apiKeyInput').value;
             if (!apiKey) {
-                alert('Please enter your API key to initialize the interface.');
+                alert('Please enter an API key');
                 return;
             }
-            
+
             try {
-                genAI = new window.GoogleGenerativeAI(apiKey);
-                model = genAI.getGenerativeModel({ model: "gemini-pro" });
-                document.getElementById('apiKey').disabled = true;
-                alert('Interface initialized successfully!');
+                genAI = new GoogleGenerativeAI(apiKey);
+                model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+                
+                document.getElementById('userInput').disabled = false;
+                document.getElementById('sendButton').disabled = false;
+                document.getElementById('apiKeyInput').disabled = true;
+                
+                addToChatbox("System: API initialized successfully. You can now send messages.", 'assistant');
             } catch (error) {
-                console.error('Error initializing interface:', error);
-                alert('Failed to initialize interface. Please verify your key and retry.');
+                alert('Failed to initialize API. Please check your API key and try again.');
+                console.error('API initialization error:', error);
             }
         }
 
-        async function sendMessage() {
-            if (!model) {
-                await initializeAPI();
-                if (!model) return;
-            }
-
-            const userInput = document.getElementById('userInput').value;
-            if (!userInput.trim()) return;
-
-            addMessageToChatbox('user', userInput);
-            document.getElementById('userInput').value = '';
+        window.sendMessage = async function() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (!message) return;
+            
+            addToChatbox(message, 'user');
+            userInput.value = '';
+            
             document.getElementById('loader').style.display = 'block';
-
+            
             try {
-                const result = await model.generateContent(userInput);
-                const response = await result.response;
-                const text = response.text();
-                addMessageToChatbox('assistant', text);
+                conversationHistory.push({ role: "user", parts: message });
+                
+                const result = await model.generateContent({
+                    contents: [{ role: "user", parts: [{ text: conversationHistory.map(msg => `${msg.role}: ${msg.parts}`).join("\n") }] }],
+                    generationConfig: {
+                        maxOutputTokens: 1000,
+                    },
+                });
+
+                const response = result.response;
+                addToChatbox(response.text(), 'assistant');
+                conversationHistory.push({ role: "model", parts: response.text() });
             } catch (error) {
-                console.error('Error in processing:', error);
-                addMessageToChatbox('assistant', 'An error occurred. Please try again.');
+                addToChatbox("An error occurred while processing your request.", 'assistant');
+                console.error('Gemini API error:', error);
             } finally {
                 document.getElementById('loader').style.display = 'none';
             }
         }
 
-        function addMessageToChatbox(sender, message) {
+        function addToChatbox(message, sender) {
             const chatbox = document.getElementById('chatbox');
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender);
-            messageElement.textContent = message;
+            
+            if (sender === 'assistant') {
+                messageElement.innerHTML = marked.parse(message);
+            } else {
+                messageElement.textContent = message;
+            }
+            
             chatbox.appendChild(messageElement);
             chatbox.scrollTop = chatbox.scrollHeight;
         }
 
-        document.getElementById('userInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
+        document.getElementById('userInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
                 sendMessage();
             }
         });
