@@ -2,6 +2,8 @@
 
 API-LLM-Hub is a lightweight JavaScript library that simplifies the use of multiple AI language models directly in your web browser. It offers a straightforward interface for interacting with various AI providers through vanilla JavaScript, with **no build steps or backend required.**
 
+## Find it interesting? Do ⭐ the repo!
+
 ## Key Features
 
 - **Simple Integration**: Include a single script and start using AI in your web projects.
