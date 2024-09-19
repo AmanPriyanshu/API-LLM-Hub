@@ -93,6 +93,7 @@
   
   await ai.initialize();
   const response = await ai.sendMessage("Hello, how are you?");
+  document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
   console.log(response);
 &lt;/script&gt;
         </code></pre>
@@ -155,6 +156,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
+    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
   }
   
   runOpenAIExample();
@@ -187,6 +189,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
+    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
   }
   
   runAnthropicExample();
@@ -219,6 +222,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
+    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
   }
   
   runTogetherAIExample();
@@ -251,6 +255,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
+    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
   }
   
   runGeminiExample();
