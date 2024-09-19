@@ -79,20 +79,22 @@
       
       <p class="mt-4 mb-2"><strong>Direct Usage Example</strong></p>
       <div class="code-block">
-        <pre><code class="language-javascript">
-import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+        <pre><code class="language-html">
+<script type="module">
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
 
-const ai = new APILLMHub({
-  provider: 'anthropic',
-  apiKey: 'your-anthropic-api-key',
-  model: 'claude-3-5-sonnet-20240620',
-  maxTokens: 50,
-  temperature: 0.7
-});
-
-await ai.initialize();
-const response = await ai.sendMessage("Hello, how are you?");
-console.log(response);
+  const ai = new APILLMHub({
+    provider: 'anthropic',
+    apiKey: 'your-anthropic-api-key',
+    model: 'claude-3-5-sonnet-20240620',
+    maxTokens: 50,
+    temperature: 0.7
+  });
+  
+  await ai.initialize();
+  const response = await ai.sendMessage("Hello, how are you?");
+  console.log(response);
+</script>
         </code></pre>
       </div>
     </div>
