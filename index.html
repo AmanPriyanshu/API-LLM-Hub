@@ -93,7 +93,7 @@
   
   await ai.initialize();
   const response = await ai.sendMessage("Hello, how are you?");
-  document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
+  document.body.innerHTML += `&lt;p&gt;Input: Hello<br>Output: ${response}&lt;/p&gt;`;
   console.log(response);
 &lt;/script&gt;
         </code></pre>
@@ -156,7 +156,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
-    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
+  document.body.innerHTML += `&lt;p&gt;Input: Hello<br>Output: ${response}&lt;/p&gt;`;
   }
   
   runOpenAIExample();
@@ -189,7 +189,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
-    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
+  document.body.innerHTML += `&lt;p&gt;Input: Hello<br>Output: ${response}&lt;/p&gt;`;
   }
   
   runAnthropicExample();
@@ -222,7 +222,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
-    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
+  document.body.innerHTML += `&lt;p&gt;Input: Hello<br>Output: ${response}&lt;/p&gt;`;
   }
   
   runTogetherAIExample();
@@ -255,7 +255,7 @@
     await ai.initialize();
     const response = await ai.sendMessage("Hello");
     console.log(response);
-    document.body.innerHTML += `<p>Input: Hello<br>Output: ${response}</p>`;
+  document.body.innerHTML += `&lt;p&gt;Input: Hello<br>Output: ${response}&lt;/p&gt;`;
   }
   
   runGeminiExample();
