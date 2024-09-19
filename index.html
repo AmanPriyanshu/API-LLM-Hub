@@ -139,24 +139,26 @@
         </button>
         <div id="openai-example" class="transition-max-height">
           <div class="code-block">
-            <pre><code class="language-javascript" id="openai-code">
-import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
-
-async function runOpenAIExample() {
-  const ai = new APILLMHub({
-    provider: 'openai',
-    apiKey: 'your-openai-api-key',
-    model: 'gpt-3.5-turbo',
-    maxTokens: 50,
-    temperature: 0.7
-  });
-              
-  await ai.initialize();
-  const response = await ai.sendMessage("Hello");
-  console.log(response);
-}
-
-runOpenAIExample();
+            <pre><code class="language-html" id="openai-code">
+&lt;script type="module"&gt;
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+  
+  async function runOpenAIExample() {
+    const ai = new APILLMHub({
+      provider: 'openai',
+      apiKey: 'your-openai-api-key',
+      model: 'gpt-3.5-turbo',
+      maxTokens: 50,
+      temperature: 0.7
+    });
+                
+    await ai.initialize();
+    const response = await ai.sendMessage("Hello");
+    console.log(response);
+  }
+  
+  runOpenAIExample();
+&lt;/script&gt;
             </code></pre>
             <button class="copy-button" onclick="copyCode('openai-code')">Copy</button>
           </div>
@@ -169,24 +171,26 @@ runOpenAIExample();
         </button>
         <div id="anthropic-example" class="transition-max-height">
           <div class="code-block">
-            <pre><code class="language-javascript" id="anthropic-code">
-import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
-
-async function runAnthropicExample() {
-  const ai = new APILLMHub({
-    provider: 'anthropic',
-    apiKey: 'your-anthropic-api-key',
-    model: 'claude-3-5-sonnet-20240620',
-    maxTokens: 50,
-    temperature: 0.7
-  });
-              
-  await ai.initialize();
-  const response = await ai.sendMessage("Hello");
-  console.log(response);
-}
-
-runAnthropicExample();
+            <pre><code class="language-html" id="anthropic-code">
+&lt;script type="module"&gt;
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+  
+  async function runAnthropicExample() {
+    const ai = new APILLMHub({
+      provider: 'anthropic',
+      apiKey: 'your-anthropic-api-key',
+      model: 'claude-3-5-sonnet-20240620',
+      maxTokens: 50,
+      temperature: 0.7
+    });
+                
+    await ai.initialize();
+    const response = await ai.sendMessage("Hello");
+    console.log(response);
+  }
+  
+  runAnthropicExample();
+&lt;/script&gt;
             </code></pre>
             <button class="copy-button" onclick="copyCode('anthropic-code')">Copy</button>
           </div>
@@ -199,24 +203,26 @@ runAnthropicExample();
         </button>
         <div id="togetherai-example" class="transition-max-height">
           <div class="code-block">
-            <pre><code class="language-javascript" id="togetherai-code">
-import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
-
-async function runTogetherAIExample() {
-  const ai = new APILLMHub({
-    provider: 'togetherai',
-    apiKey: 'your-togetherai-api-key',
-    model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
-    maxTokens: 50,
-    temperature: 0.7
-  });
-              
-  await ai.initialize();
-  const response = await ai.sendMessage("Hello");
-  console.log(response);
-}
-
-runTogetherAIExample();
+            <pre><code class="language-html" id="togetherai-code">
+&lt;script type="module"&gt;
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+  
+  async function runTogetherAIExample() {
+    const ai = new APILLMHub({
+      provider: 'togetherai',
+      apiKey: 'your-togetherai-api-key',
+      model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+      maxTokens: 50,
+      temperature: 0.7
+    });
+                
+    await ai.initialize();
+    const response = await ai.sendMessage("Hello");
+    console.log(response);
+  }
+  
+  runTogetherAIExample();
+&lt;/script&gt;
             </code></pre>
             <button class="copy-button" onclick="copyCode('togetherai-code')">Copy</button>
           </div>
@@ -229,24 +235,26 @@ runTogetherAIExample();
         </button>
         <div id="gemini-example" class="transition-max-height">
           <div class="code-block">
-            <pre><code class="language-javascript" id="gemini-code">
-import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
-
-async function runGeminiExample() {
-  const ai = new APILLMHub({
-    provider: 'gemini',
-    apiKey: 'your-gemini-api-key',
-    model: 'gemini-1.5-pro',
-    maxTokens: 50,
-    temperature: 0.7
-  });
-              
-  await ai.initialize();
-  const response = await ai.sendMessage("Hello");
-  console.log(response);
-}
-
-runGeminiExample();
+            <pre><code class="language-html" id="gemini-code">
+&lt;script type="module"&gt;
+  import APILLMHub from 'https://amanpriyanshu.github.io/API-LLM-Hub/unified-llm-api.js';
+  
+  async function runGeminiExample() {
+    const ai = new APILLMHub({
+      provider: 'gemini',
+      apiKey: 'your-gemini-api-key',
+      model: 'gemini-1.5-pro',
+      maxTokens: 50,
+      temperature: 0.7
+    });
+                
+    await ai.initialize();
+    const response = await ai.sendMessage("Hello");
+    console.log(response);
+  }
+  
+  runGeminiExample();
+&lt;/script&gt;
             </code></pre>
             <button class="copy-button" onclick="copyCode('gemini-code')">Copy</button>
           </div>
